@@ -69,3 +69,5 @@ app.listen(PORT, () =>
 );
 
 require('./src/sync')()
+
+module.exports = app;
