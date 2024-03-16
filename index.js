@@ -1,6 +1,6 @@
 "use strict";
 /* -------------------------------------------------------
-    EXPRESSJS - BLOG API
+    EXPRESS.JS - BLOG API
 ------------------------------------------------------- */
 /*
     BLOG API with Mongoose
@@ -13,14 +13,14 @@ const express = require("express")
 const app = express()
 
 
-app.use(express.json()) // yukarıda  kalsın
+app.use(express.json()) 
 
 require('dotenv').config()
 const PORT = process.env.PORT
 const HOST = process.env.HOST
 
 /* DB connection  */
-require('./src/configs/dbConnection') // dotenv çalıştıktan sonra 
+require('./src/configs/dbConnection') // post dotenv 
 
 /* ------------------------------------------------------- */
 // SessionCookies:
@@ -30,13 +30,13 @@ require('./src/configs/dbConnection') // dotenv çalıştıktan sonra
 
 const session = require('cookie-session')
 app.use(session({
-    secret: process.env.SECRET_KEY, // Şifreleme anahtarı
-    // maxAge: 1000 * 60 * 60 * 24 * 3  // miliseconds // 3 days
+    secret: process.env.SECRET_KEY, // password key
+    // maxAge: 1000 * 60 * 60 * 24 * 3  // milliseconds // 3 days
 }))
 /* ------------------------------------------------------- */
 // Middlewares:
 
-// Check logined User:
+// Check login User:
 app.use(require('./src/middlewares/userControl'))
 
 // Filter, Search, Sort, Pagination:
@@ -65,7 +65,7 @@ app.all('/', (req, res) => {
 app.use('/user', require("./src/routes/user.router"))
 app.use('/blog', require("./src/routes/blog.router"))
 
-app.use(require('./src/middlewares/errorHandler')) // aşağıda kalsın
+app.use(require('./src/middlewares/errorHandler')) 
 
 
 app.listen(PORT, () => console.log(` Server Running on http://${HOST}:${PORT}`))
