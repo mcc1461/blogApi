@@ -67,6 +67,7 @@ app.use('/blog', require("./src/routes/blog.router"))
 
 app.use(require('./src/middlewares/errorHandler')) // aşağıda kalsın
 
+
 app.listen(PORT, () => console.log(` Server Running on http://${HOST}:${PORT}`))
 
 // require('./src/sync')()
