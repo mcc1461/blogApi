@@ -1,7 +1,4 @@
 "use strict";
-/* -------------------------------------------------------
-    EXPRESS.JS - BLOG API
-------------------------------------------------------- */
 /*
     BLOG API with Mongoose
 */
@@ -9,18 +6,17 @@
     $ npm i express dotenv express-async-errors
     $ npm i mongoose
 */
-const express = require("express")
-const app = express()
+const express = require("express");
+const app = express();
 
+app.use(express.json()); // yukarıda  kalsın
 
-app.use(express.json()) 
-
-require('dotenv').config()
-const PORT = process.env.PORT
-const HOST = process.env.HOST
+require("dotenv").config();
+const PORT = process.env.PORT;
+const HOST = process.env.HOST;
 
 /* DB connection  */
-require('./src/configs/dbConnection') // post dotenv 
+require("./src/configs/dbConnection"); // dotenv çalıştıktan sonra
 
 /* ------------------------------------------------------- */
 // SessionCookies:
@@ -28,46 +24,48 @@ require('./src/configs/dbConnection') // post dotenv
 // https://www.npmjs.com/package/cookie-session
 //* $ npm i cookie-session
 
-const session = require('cookie-session')
-app.use(session({
-    secret: process.env.SECRET_KEY, // password key
-    // maxAge: 1000 * 60 * 60 * 24 * 3  // milliseconds // 3 days
-}))
-/* ------------------------------------------------------- */
-// Middlewares:
+const session = require("cookie-session");
 
-// Check login User:
-app.use(require('./src/middlewares/userControl'))
-
-// Filter, Search, Sort, Pagination:
-app.use(require('./src/middlewares/findSearchSortPage'))
+app.use(
+  session({
+    secret: process.env.SECRET_KEY, //şifreleme anahtarı
+    // maxAge:1000 * 60 * 60 * 24 * 3 //miliseconds //3 days
+  })
+);
 
 /* ------------------------------------------------------- */
+//! check
+app.use(require("./src/middlewares/userControl"));
 
-app.all('/', (req, res) => {
-    // res.send('WELCOME BLOG API PROJECT')
-    if (req.isLogin) {
-        res.send({
-            error: false,
-            message: 'WELCOME BLOG API PROJECT',
-            session: req.session,
-            user: req.user
-        })
-    } else {
-        res.send({
-            error: false,
-            message: 'WELCOME BLOG API PROJECT',
-            session: req.session,
-        })
-    }
-})
+/* ------------------------------------------------------- */
+//FİLTER SEARCH SORT,PAGE
+app.use(require("./src/middlewares/findSearchSortPage"));
 
-app.use('/user', require("./src/routes/user.router"))
-app.use('/blog', require("./src/routes/blog.router"))
+/* ------------------------------------------------------- */
+app.all("/", (req, res) => {
+  if (req.isLogin) {
+    res.send({
+      error: false,
+      message: "WELCOME BLOG API PROJECT",
+      session: req.session,
+      user: req.user,
+    });
+  } else {
+    res.send({
+      error: false,
+      message: "WELCOME BLOG API PROJECT",
+      session: req.session,
+    });
+  }
+});
 
-app.use(require('./src/middlewares/errorHandler')) 
+app.use("/user", require("./src/routes/user.router"));
+app.use("/blog", require("./src/routes/blog.router"));
 
+app.use(require("./src/middlewares/errorHandler")); // aşağıda kalsın
 
-app.listen(PORT, () => console.log(` Server Running on http://${HOST}:${PORT}`))
+app.listen(PORT, () =>
+  console.log(` Server Running on http://${HOST}:${PORT}`)
+);
 
-// require('./src/sync')()
+require('./src/sync')()
