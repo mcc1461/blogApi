@@ -48,13 +48,11 @@ module.exports.BlogCategory = {
             error: false,
             body: req.body,
             data: data, // info about update
-            // güncel veriyi istiyorsan tekrar çağır
             newdata: newdata
         })
     },
     delete: async (req, res) => {
         const data = await BlogCategory.deleteOne({ _id: req.params.categoryId })
-        // console.log(data);
         res.sendStatus((data.deletedCount >= 1) ? 204 : 404)
     }
 }
@@ -155,7 +153,6 @@ module.exports.BlogPost = {
     },
     delete: async (req, res) => {
         const data = await BlogPost.deleteOne({ _id: req.params.postId })
-        // console.log(data);
         res.sendStatus((data.deletedCount >= 1) ? 204 : 404)
     }
 }
